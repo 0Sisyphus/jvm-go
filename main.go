@@ -5,6 +5,7 @@ import (
 	"jvm-go/classfile"
 	"jvm-go/classpath"
 	"jvm-go/cmd"
+	"jvm-go/rtda"
 	"strings"
 )
 
@@ -16,7 +17,8 @@ func main() {
 	} else if myCmd.HelpFlag || myCmd.Class == "" {
 		cmd.PrintUsage()
 	} else {
-		startJVM(myCmd)
+		//startJVM(myCmd)
+		startJVMTest(myCmd)
 	}
 
 }
@@ -66,4 +68,49 @@ func printClassInfo(cf *classfile.ClassFile) {
 		fmt.Printf("method name:%s descriptor: %s\n", m.Name(), m.Descriptor())
 	}
 
+}
+
+func startJVMTest(cmd *cmd.Cmd) {
+	testLocalVarAndOperandStack()
+}
+
+// testLocalVarAndOperandStack 测试局部变量表和操作数栈
+func testLocalVarAndOperandStack() {
+	frame := rtda.NewFrame(100, 100)
+	testLocalVar(frame.LocalVars)
+	testOperandStack(frame.OperandStack)
+}
+
+func testLocalVar(vars rtda.LocalVars) {
+	vars.SetInt(0, 100)
+	vars.SetInt(1, -100)
+	vars.SetLong(2, 2997924580)
+	vars.SetLong(4, -2997924580)
+	vars.SetFloat(6, 3.1415926)
+	vars.SetDouble(7, 2.71828182845)
+	vars.SetRef(9, nil)
+	println(vars.GetInt(0))
+	println(vars.GetInt(1))
+	println(vars.GetLong(2))
+	println(vars.GetLong(4))
+	println(vars.GetFloat(6))
+	println(vars.GetDouble(7))
+	println(vars.GetRef(9))
+}
+
+func testOperandStack(ops *rtda.OperandStack) {
+	ops.PushInt(100)
+	ops.PushInt(-100)
+	ops.PushLong(2997924580)
+	ops.PushLong(-2997924580)
+	ops.PushFloat(3.1415926)
+	ops.PushDouble(2.71828182845)
+	ops.PushRef(nil)
+	println(ops.PopRef())
+	println(ops.PopDouble())
+	println(ops.PopFloat())
+	println(ops.PopLong())
+	println(ops.PopLong())
+	println(ops.PopInt())
+	println(ops.PopInt())
 }
