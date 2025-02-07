@@ -26,8 +26,8 @@ type ILOAD_3 struct {
 }
 
 func _iload(frame *rtda.Frame, index uint) {
-	val := frame.LocalVars.GetInt(index)
-	frame.OperandStack.PushInt(val)
+	val := frame.LocalVars().GetInt(index)
+	frame.OperandStack().PushInt(val)
 }
 
 func (self *ILOAD) Execute(frame *rtda.Frame) {

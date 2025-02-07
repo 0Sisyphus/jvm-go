@@ -10,7 +10,7 @@ type POP struct {
 }
 
 func (self *POP) Execute(frame *rtda.Frame) {
-	stack := frame.OperandStack
+	stack := frame.OperandStack()
 	stack.PopSlot()
 }
 
@@ -19,7 +19,7 @@ type POP2 struct {
 }
 
 func (self *POP2) Execute(frame *rtda.Frame) {
-	stack := frame.OperandStack
+	stack := frame.OperandStack()
 	stack.PopSlot()
 	stack.PopSlot()
 }

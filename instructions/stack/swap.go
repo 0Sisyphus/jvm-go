@@ -5,12 +5,12 @@ import (
 	"jvm-go/rtda"
 )
 
-type Swap struct {
+type SWAP struct {
 	base.NoOperandsInstruction
 }
 
-func (self *Swap) Execute(frame *rtda.Frame) {
-	stack := frame.OperandStack
+func (self *SWAP) Execute(frame *rtda.Frame) {
+	stack := frame.OperandStack()
 	slot1 := stack.PopSlot()
 	slot2 := stack.PopSlot()
 	stack.PushSlot(slot1)

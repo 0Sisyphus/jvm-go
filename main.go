@@ -17,8 +17,8 @@ func main() {
 	} else if myCmd.HelpFlag || myCmd.Class == "" {
 		cmd.PrintUsage()
 	} else {
-		//startJVM(myCmd)
-		startJVMTest(myCmd)
+		startJVM(myCmd)
+		//startJVMTest(myCmd)
 	}
 
 }
@@ -26,7 +26,7 @@ func main() {
 func myTestCmd() *cmd.Cmd {
 	return &cmd.Cmd{
 		XjreOption: "/Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre",
-		Class:      "java.lang.String",
+		Class:      "GuessTest",
 		Args:       []string{},
 	}
 }
@@ -36,8 +36,21 @@ func startJVM(cmd *cmd.Cmd) {
 	cp := classpath.Parse(cmd.XjreOption, cmd.CpOption)
 	className := strings.Replace(cmd.Class, ".", "/", -1)
 	cf := loadClass(className, cp)
-	fmt.Println(cmd.Class)
-	printClassInfo(cf)
+	mainMethod := getMainMethod(cf)
+	if mainMethod != nil {
+		interpreter(mainMethod)
+	} else {
+		fmt.Println("Main method not found in class %s\n", cmd.Class)
+	}
+}
+
+func getMainMethod(cf *classfile.ClassFile) *classfile.MemberInfo {
+	for _, m := range cf.Methods() {
+		if m.Name() == "main" && m.Descriptor() == "([Ljava/lang/String;)V" {
+			return m
+		}
+	}
+	return nil
 }
 
 func loadClass(className string, cp *classpath.Classpath) *classfile.ClassFile {
@@ -76,9 +89,10 @@ func startJVMTest(cmd *cmd.Cmd) {
 
 // testLocalVarAndOperandStack 测试局部变量表和操作数栈
 func testLocalVarAndOperandStack() {
-	frame := rtda.NewFrame(100, 100)
-	testLocalVar(frame.LocalVars)
-	testOperandStack(frame.OperandStack)
+
+	frame := rtda.NewFrame(rtda.NewThread(), 100, 100)
+	testLocalVar(frame.LocalVars())
+	testOperandStack(frame.OperandStack())
 }
 
 func testLocalVar(vars rtda.LocalVars) {

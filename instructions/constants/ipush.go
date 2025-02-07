@@ -21,7 +21,7 @@ func (self *BIPUSH) FetchOperands(reader *base.ByteCodeReader) {
 
 func (self *BIPUSH) Execute(frame *rtda.Frame) {
 	i := int32(self.val)
-	frame.OperandStack.PushInt(i)
+	frame.OperandStack().PushInt(i)
 }
 
 func (self *SIPUSH) FetchOperands(reader *base.ByteCodeReader) {
@@ -30,5 +30,5 @@ func (self *SIPUSH) FetchOperands(reader *base.ByteCodeReader) {
 
 func (self *SIPUSH) Execute(frame *rtda.Frame) {
 	i := int32(self.val)
-	frame.OperandStack.PushInt(i)
+	frame.OperandStack().PushInt(i)
 }
