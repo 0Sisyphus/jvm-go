@@ -33,11 +33,19 @@ func (self *ConstantIntegerInfo) readInfo(reader *ClassReader) {
 	self.val = int32(bytes)
 }
 
+func (self *ConstantIntegerInfo) Value() int32 {
+	return self.val
+}
+
 // readInfo 方法从 ClassReader 中读取浮点数信息
 func (self *ConstantFloatInfo) readInfo(reader *ClassReader) {
 	// 读取4个字节并转换为float32
 	bytes := reader.readUint32()
 	self.val = math.Float32frombits(bytes)
+}
+
+func (self *ConstantFloatInfo) Value() float32 {
+	return self.val
 }
 
 // readInfo 方法从 ClassReader 中读取长整数信息
@@ -47,9 +55,17 @@ func (self *ConstantLongInfo) readInfo(reader *ClassReader) {
 	self.val = int64(bytes)
 }
 
+func (self *ConstantLongInfo) Value() int64 {
+	return self.val
+}
+
 // readInfo 方法从 ClassReader 中读取双精度浮点数信息
 func (self *ConstantDoubleInfo) readInfo(reader *ClassReader) {
 	// 读取8个字节并转换为float64
 	bytes := reader.readUint64()
 	self.val = math.Float64frombits(bytes)
+}
+
+func (self *ConstantDoubleInfo) Value() float64 {
+	return self.val
 }
